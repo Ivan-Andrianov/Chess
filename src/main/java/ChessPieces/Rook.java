@@ -1,0 +1,55 @@
+package ChessPieces;
+
+import GameLogic.Game;
+
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Rook implements ChessPiece{
+    private Color color;
+    private ImageIcon icon;
+    private boolean firstStep;
+
+    public Rook(Color color){
+        icon = new ImageIcon("src/main/resources/"+(color==Color.WHITE?"White":"Black")+"Rook"+".png");
+        firstStep =false;
+        this.color = color;
+    }
+    public ImageIcon getFigureIcon(){
+        return icon;
+    }
+
+    @Override
+    public Color getFigureColor() {
+        return color;
+    }
+
+    public boolean getFirstStep(){
+        return this.firstStep;
+    }
+    public void setFirstStep(){
+        if (firstStep==false) firstStep = true;
+    }
+
+    @Override
+    public boolean enableMakeMoved(String coordinate1, String coordinate2, Game game) {
+        if (coordinate1.charAt(0)!=coordinate2.charAt(0) && coordinate1.charAt(1)!=coordinate2.charAt(1)) return false;
+        if (coordinate1.charAt(0)!=coordinate2.charAt(0)){
+            for (char c=(char) (Math.min(coordinate1.charAt(0),coordinate2.charAt(0))+1);c<Math.max(coordinate1.charAt(0),coordinate2.charAt(0));c++){
+                if (game.getChessPiece(c+String.valueOf(coordinate1.charAt(1)))!=null) return false;
+            }
+        }
+        if (coordinate1.charAt(1)!=coordinate2.charAt(1)){
+            for (int i = Math.min(Integer.valueOf(String.valueOf(coordinate1.charAt(1))),Integer.valueOf(String.valueOf(coordinate2.charAt(1))))+1;i<Math.max(Integer.valueOf(String.valueOf(coordinate1.charAt(1))),Integer.valueOf(String.valueOf(coordinate2.charAt(1))));i++){
+                if (game.getChessPiece(String.valueOf(coordinate1.charAt(0))+i)!=null) return false;
+            }
+        }
+        if (this.firstStep==false) setFirstStep();
+
+        return true;
+    }
+
+
+
+}
